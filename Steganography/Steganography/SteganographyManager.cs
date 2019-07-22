@@ -10,6 +10,10 @@ namespace Steganography
 {
     public static class SteganographyManager
     {
+        // 1 Pixel can store .5 bytes of data
+        // 2 pixels can store 1 byte of data
+        // Length of the data is stored in 8 pixels (4 bytes Int32)
+
         public static bool FitsIntoImage(byte[] data, Image steganograph)
         {
             return data.Length + 1 < TotalCapacity(steganograph);
@@ -26,7 +30,7 @@ namespace Steganography
         {
             if (GetLSB(value) && !bit)
                 return (byte)(value ^ 1); //Will flip the LSB to 0 if it is 1
-            else if(!GetLSB(value) && bit)
+            else if (!GetLSB(value) && bit)
                 return (byte)(value | 1); //Will flip the LSB to 1 if it is 0
             return value;
         }
@@ -48,45 +52,46 @@ namespace Steganography
             return new byte[4] { colour.A, colour.R, colour.G, colour.B };
         }
 
-        public static byte[] DecodeImage(Image image)
+        public static byte[] DecodeImage(Bitmap image)
         {
-            Bitmap bitMap = new Bitmap(image);
             bool[] bits = new bool[32];
 
             //We only want to read 8 pixels to decode the first 4 bytes, thats contains the length of the total data.
             for (int x = 0; x < Math.Ceiling(8d / image.Width); x++)
                 for (int y = 0; y < (image.Height > 8 ? 8 : image.Height); y++)
                 {
-                    byte[] colourBytes = GetColourBytes(bitMap.GetPixel(x, y));
+                    byte[] colourBytes = GetColourBytes(image.GetPixel(x, y));
+
                     for (int i = 0; i < 4; i++)
+                    {
                         bits[((x + y) * 4) + i] = GetLSB(colourBytes[i]);
+                        Console.WriteLine(colourBytes[i]);
+                    }
                 }
 
-            byte[] lengthBytes = BitArrayToByteArray(new BitArray(bits.Reverse().ToArray()));
+            byte[] lengthBytes = BitArrayToByteArray(new BitArray(bits));
             int length = BitConverter.ToInt32(lengthBytes, 0);
             return DecodeImageLSB(image, length);
         }
 
-        private static byte[] DecodeImageLSB(Image image, int length)
+        private static byte[] DecodeImageLSB(Bitmap image, int length)
         {
-            Bitmap bitMap = new Bitmap(image);
-
             int totalPixelsEncoded = ((length * 8) / 4);
             bool[] bits = new bool[length * 8];
 
             for (int x = 0; x < image.Width; x++)
                 for (int y = 0; y < image.Height; y++)
                 {
-                    if (x + y < 32)
+                    if ((x + y) < 8)
                         continue;
 
-                    if(x + y > totalPixelsEncoded)
+                    if ((x + y - 8) >= totalPixelsEncoded)
                         return BitArrayToByteArray(new BitArray(bits.ToArray()));
 
-                    byte[] colourBytes = GetColourBytes(bitMap.GetPixel(x, y));
+                    byte[] colourBytes = GetColourBytes(image.GetPixel(x, y));
 
                     for (int i = 0; i < 4; i++)
-                        bits[(x + y) - 32] = GetLSB(colourBytes[i]);
+                        bits[((x + y - 8) * 4) + i] = GetLSB(colourBytes[i]);
                 }
 
             return BitArrayToByteArray(new BitArray(bits.ToArray()));
@@ -118,7 +123,7 @@ namespace Steganography
 
                     byte[] colourBytes = GetColourBytes(bitMap.GetPixel(x, y));
                     for (int i = 0; i < 4; i++)
-                            colourBytes[i] = SetLSB(bits[((x + y) * 4) + i], colourBytes[i]);
+                        colourBytes[i] = SetLSB(bits[((x + y) * 4) + i], colourBytes[i]);
 
                     bitMap.SetPixel(x, y, Color.FromArgb(colourBytes[0], colourBytes[1], colourBytes[2], colourBytes[3]));
                 }

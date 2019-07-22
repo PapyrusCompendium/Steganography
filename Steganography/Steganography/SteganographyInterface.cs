@@ -12,8 +12,8 @@ namespace Steganography
 {
     public partial class SteganographyInterface : Form
     {
-        private Image InputImage { get; set; }
-        private Image OutputImage { get; set; }
+        private Bitmap InputImage { get; set; }
+        private Bitmap OutputImage { get; set; }
 
         public SteganographyInterface()
         {
@@ -27,7 +27,7 @@ namespace Steganography
         private void ImageSelectionLink_Click(object sender, EventArgs e)
         {
             if (openFileDialog.ShowDialog() == DialogResult.OK)
-                InputImage = Image.FromFile(openFileDialog.FileName);
+                InputImage = new Bitmap(Image.FromFile(openFileDialog.FileName));
 
             inputImage.Image = InputImage;
             CalculateImageCapacity();
@@ -38,11 +38,13 @@ namespace Steganography
             if (encodeRadio.Checked)
             {
                 if (SteganographyManager.FitsIntoImage(Encoding.UTF8.GetBytes(secretMessageText.Text), inputImage.Image))
-                    outputImage.Image = SteganographyManager.EncodeImage(InputImage, Encoding.UTF8.GetBytes(secretMessageText.Text));
+                    OutputImage = SteganographyManager.EncodeImage(InputImage, Encoding.UTF8.GetBytes(secretMessageText.Text));
+
+                outputImage.Image = OutputImage;
             }
             else if (decodeRadio.Checked)
             {
-                MessageBox.Show(Encoding.UTF8.GetString(SteganographyManager.DecodeImage(outputImage.Image)));
+                MessageBox.Show(Encoding.UTF8.GetString(SteganographyManager.DecodeImage(OutputImage)));
             }
         }
     }
