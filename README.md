@@ -1,4 +1,9 @@
 # Steganography
+[![Github All Releases](https://img.shields.io/github/downloads/PapyrusCompendium/Steganography/total.svg)]()
+[![Github Issues](https://img.shields.io/github/issues/PapyrusCompendium/Steganography.svg)]()
+[![Github Stars](https://img.shields.io/github/stars/PapyrusCompendium/Steganography.svg)]()
+[![Github License](https://img.shields.io/github/license/PapyrusCompendium/Steganography.svg)]()
+
 This is my own implementation of steganography, using a LSB (Least Significant Bit) method.  
 The way this works is by taking the LSB for every byte in a pixel (There are four in this case ARGB)  
 and changing the LSB to one bit of the data that you are trying to store. For example if I have  
