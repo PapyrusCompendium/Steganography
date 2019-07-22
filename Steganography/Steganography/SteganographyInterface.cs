@@ -12,6 +12,9 @@ namespace Steganography
 {
     public partial class SteganographyInterface : Form
     {
+        private Image InputImage { get; set; }
+        private Image OutputImage { get; set; }
+
         public SteganographyInterface()
         {
             InitializeComponent();
@@ -24,8 +27,9 @@ namespace Steganography
         private void ImageSelectionLink_Click(object sender, EventArgs e)
         {
             if (openFileDialog.ShowDialog() == DialogResult.OK)
-                inputImage.Load(openFileDialog.FileName);
+                InputImage = Image.FromFile(openFileDialog.FileName);
 
+            inputImage.Image = InputImage;
             CalculateImageCapacity();
         }
 
@@ -34,7 +38,7 @@ namespace Steganography
             if (encodeRadio.Checked)
             {
                 if (SteganographyManager.FitsIntoImage(Encoding.UTF8.GetBytes(secretMessageText.Text), inputImage.Image))
-                    outputImage.Image = SteganographyManager.EncodeImage(inputImage.Image, Encoding.UTF8.GetBytes(secretMessageText.Text));
+                    outputImage.Image = SteganographyManager.EncodeImage(InputImage, Encoding.UTF8.GetBytes(secretMessageText.Text));
             }
             else if (decodeRadio.Checked)
             {
