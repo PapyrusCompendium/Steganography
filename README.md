@@ -19,7 +19,7 @@ anyone. Simply launch the executable (either compile or download the release) an
 image. You can now select if you would like to use AES cryptography. If you choose to use AES, then  
 make sure to enter an AES key! Now you can select convert, and process the image. At the point you  
 convert the image you will see another image appear on the right hand side of the menu. The image  
-on the right side is the encoded image, you can choose to download this from here. To decode the  
+on the right side is the encoded image, you can choose to save this image from here. To decode the  
 image simply follow the same process but selecting the decode radio button on the top, and not  
 the encode radio button.
 
