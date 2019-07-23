@@ -42,6 +42,7 @@
             this.secretMessageSize = new System.Windows.Forms.Label();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
+            this.generateKeyButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.inputImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.outputImage)).BeginInit();
             this.SuspendLayout();
@@ -120,9 +121,9 @@
             this.aesPassword.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.aesPassword.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.aesPassword.ForeColor = System.Drawing.Color.White;
-            this.aesPassword.Location = new System.Drawing.Point(432, 103);
+            this.aesPassword.Location = new System.Drawing.Point(416, 103);
             this.aesPassword.Name = "aesPassword";
-            this.aesPassword.Size = new System.Drawing.Size(162, 22);
+            this.aesPassword.Size = new System.Drawing.Size(122, 22);
             this.aesPassword.TabIndex = 5;
             this.aesPassword.Text = "AesKey";
             // 
@@ -189,12 +190,27 @@
             this.secretMessageSize.TabIndex = 7;
             this.secretMessageSize.Text = "Data Size: 0 bytes";
             // 
+            // generateKeyButton
+            // 
+            this.generateKeyButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(25)))), ((int)(((byte)(28)))));
+            this.generateKeyButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.generateKeyButton.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.generateKeyButton.ForeColor = System.Drawing.Color.White;
+            this.generateKeyButton.Location = new System.Drawing.Point(544, 103);
+            this.generateKeyButton.Name = "generateKeyButton";
+            this.generateKeyButton.Size = new System.Drawing.Size(73, 22);
+            this.generateKeyButton.TabIndex = 8;
+            this.generateKeyButton.Text = "Generate";
+            this.generateKeyButton.UseVisualStyleBackColor = false;
+            this.generateKeyButton.Click += new System.EventHandler(this.GenerateKeyButton_Click);
+            // 
             // SteganographyInterface
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(28)))));
             this.ClientSize = new System.Drawing.Size(1033, 352);
+            this.Controls.Add(this.generateKeyButton);
             this.Controls.Add(this.secretMessageSize);
             this.Controls.Add(this.convertImageButton);
             this.Controls.Add(this.secretMessageText);
@@ -235,6 +251,7 @@
         private System.Windows.Forms.Label secretMessageSize;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
+        private System.Windows.Forms.Button generateKeyButton;
     }
 }
 

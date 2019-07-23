@@ -37,7 +37,7 @@ namespace Steganography
             return ret;
         }
 
-        public byte[] DecodeImage()
+        public byte[] DecodeImage(bool encrypted = false, string key = "")
         {
             bool[] bits = new bool[32];
 
@@ -53,7 +53,11 @@ namespace Steganography
 
             byte[] lengthBytes = BitArrayToByteArray(new BitArray(bits));
             int length = BitConverter.ToInt32(lengthBytes, 0);
-            return DecodeImageLSB(length);
+
+            if (encrypted)
+                return Cryptography.Decrypt(DecodeImageLSB(length), key);
+            else
+                return DecodeImageLSB(length);
         }
 
         private byte[] DecodeImageLSB(int length)
@@ -79,8 +83,11 @@ namespace Steganography
             return BitArrayToByteArray(new BitArray(bits.ToArray()));
         }
 
-        public Bitmap EncodeImage(byte[] data)
+        public Bitmap EncodeImage(byte[] data, bool encrypted = false, string key = "")
         {
+            if (encrypted)
+                data = Cryptography.Encrypt(data, key);
+
             byte[] formattedData = new byte[data.Length + 4];
             BitConverter.GetBytes((Int32)data.Length).CopyTo(formattedData, 0);
             data.CopyTo(formattedData, 4);
