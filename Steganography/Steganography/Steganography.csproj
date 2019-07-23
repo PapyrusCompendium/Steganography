@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cryptography.cs" />
+    <Compile Include="SteganographicImage.cs" />
     <Compile Include="SteganographyInterface.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -55,7 +56,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SteganographyManager.cs" />
     <EmbeddedResource Include="SteganographyInterface.resx">
       <DependentUpon>SteganographyInterface.cs</DependentUpon>
     </EmbeddedResource>

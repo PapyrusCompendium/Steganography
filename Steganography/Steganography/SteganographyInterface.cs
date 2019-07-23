@@ -14,53 +14,57 @@ namespace Steganography
 {
     public partial class SteganographyInterface : Form
     {
-        private Bitmap InputImage { get; set; }
-        private Bitmap OutputImage { get; set; }
+        private SteganographicImage Stegnograph { get; set; }
 
         public SteganographyInterface()
         {
             InitializeComponent();
         }
 
-        public void CalculateImageCapacity() => imageCapacity.Text = $"Max Capacity: {SteganographyManager.TotalCapacity(InputImage)} bytes";
+        public void CalculateImageCapacity() => imageCapacity.Text = $"Max Capacity: {Stegnograph.TotalCapacity()} bytes";
         private void SecretMessageText_TextChanged(object sender, EventArgs e) => secretMessageSize.Text = $"Data Size: {Encoding.UTF8.GetBytes(secretMessageText.Text).Length} bytes";
         private void SteganographyInterface_Shown(object sender, EventArgs e) => secretMessageSize.Text = $"Data Size: {Encoding.UTF8.GetBytes(secretMessageText.Text).Length} bytes";
-
-        private void ConvertImageButton_Click(object sender, EventArgs e)
-        {
-            if (encodeRadio.Checked)
-            {
-                if (SteganographyManager.FitsIntoImage(Encoding.UTF8.GetBytes(secretMessageText.Text), InputImage))
-                {
-                    Task.Run(() =>
-                    {
-                        OutputImage = SteganographyManager.EncodeImage(InputImage, Encoding.UTF8.GetBytes(secretMessageText.Text));
-                        outputImage.Image = OutputImage;
-                        MessageBox.Show("Encoded!");
-                    });
-                }
-            }
-            else if (decodeRadio.Checked)
-            {
-                Task.Run(() => MessageBox.Show(Encoding.UTF8.GetString(SteganographyManager.DecodeImage(OutputImage == null ? InputImage : OutputImage))));
-            }
-        }
 
         private void ImageSelectionLink_Click(object sender, EventArgs e)
         {
             if (openFileDialog.ShowDialog() == DialogResult.OK)
-                InputImage = new Bitmap(Image.FromFile(openFileDialog.FileName));
+                Stegnograph = new SteganographicImage(new Bitmap(Image.FromFile(openFileDialog.FileName)));
 
-            inputImage.Image = InputImage;
+            inputImage.Image = Stegnograph.Stegnograph;
             CalculateImageCapacity();
         }
 
         private void SaveImageLink_Click(object sender, EventArgs e)
         {
-            if(saveFileDialog.ShowDialog() == DialogResult.OK)
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                Stegnograph.Stegnograph.Save(saveFileDialog.FileName, ImageFormat.Png);
+        }
+
+        private void ConvertImageButton_Click(object sender, EventArgs e)
+        {
+            if (Stegnograph == null)
             {
-                OutputImage.Save(saveFileDialog.FileName, ImageFormat.Png);
+                MessageBox.Show("Load an image!");
+                return;
             }
+
+            if (encodeRadio.Checked)
+                if (Stegnograph.FitsIntoImage(Encoding.UTF8.GetBytes(secretMessageText.Text)))
+                    Task.Run(() =>
+                    {
+                        outputImage.Image = Stegnograph.EncodeImage(Encoding.UTF8.GetBytes(secretMessageText.Text));
+                        MessageBox.Show("Encoded!");
+                    });
+                else
+                    MessageBox.Show("Data too large!");
+
+            if (decodeRadio.Checked)
+                Task.Run(() =>
+                {
+                    string decoded = Encoding.UTF8.GetString(Stegnograph.DecodeImage());
+                    secretMessageText.Invoke(new MethodInvoker(() => secretMessageText.Text = decoded));
+                    MessageBox.Show(decoded);
+                });
         }
     }
 }
