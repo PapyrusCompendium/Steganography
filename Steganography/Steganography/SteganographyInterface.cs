@@ -39,6 +39,9 @@ namespace Steganography
 
         private void SaveImageLink_Click(object sender, EventArgs e)
         {
+            if (Stegnograph == null)
+                return;
+
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 Stegnograph.Stegnograph.Save(saveFileDialog.FileName, ImageFormat.Png);
         }
