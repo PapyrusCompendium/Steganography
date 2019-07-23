@@ -10,18 +10,10 @@ namespace Steganography
 {
     public static class SteganographyManager
     {
-        public static bool FitsIntoImage(byte[] data, Bitmap steganograph)
-        {
-            return data.Length < TotalCapacity(steganograph);
-        }
-
-        public static int TotalCapacity(Bitmap steganograph)
-        {
-            // 1 Pixel can store .5 bytes of data
-            // 2 pixels can store 1 byte of data
-            // Length of the data is stored in 8 pixels (4 bytes Int32)
-            return ((steganograph.Width * steganograph.Height) - 8) / 2;
-        }
+        public static bool FitsIntoImage(byte[] data, Bitmap steganograph) => data.Length <= TotalCapacity(steganograph);
+        public static int TotalCapacity(Bitmap steganograph) => ((steganograph.Width * steganograph.Height) - 8) / 2;
+        public static bool GetLSB(byte value) => (value & 1) != 0;
+        public static byte[] GetColourBytes(Color colour) => new byte[4] { colour.A, colour.R, colour.G, colour.B };
 
         public static byte SetLSB(bool bit, byte value)
         {
@@ -32,21 +24,11 @@ namespace Steganography
             return value;
         }
 
-        public static bool GetLSB(byte value)
-        {
-            return (value & 1) != 0;
-        }
-
         public static byte[] BitArrayToByteArray(BitArray bits)
         {
             byte[] ret = new byte[(bits.Length - 1) / 8 + 1];
             bits.CopyTo(ret, 0);
             return ret;
-        }
-
-        public static byte[] GetColourBytes(Color colour)
-        {
-            return new byte[4] { colour.A, colour.R, colour.G, colour.B };
         }
 
         public static byte[] DecodeImage(Bitmap image)

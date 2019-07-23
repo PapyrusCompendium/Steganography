@@ -41,6 +41,7 @@
             this.secretMessageText = new System.Windows.Forms.TextBox();
             this.secretMessageSize = new System.Windows.Forms.Label();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.inputImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.outputImage)).BeginInit();
             this.SuspendLayout();
@@ -150,6 +151,7 @@
             this.saveImageLink.Size = new System.Drawing.Size(167, 20);
             this.saveImageLink.TabIndex = 2;
             this.saveImageLink.Text = "Save Converted Image...";
+            this.saveImageLink.Click += new System.EventHandler(this.SaveImageLink_Click);
             // 
             // imageCapacity
             // 
@@ -232,6 +234,7 @@
         private System.Windows.Forms.TextBox secretMessageText;
         private System.Windows.Forms.Label secretMessageSize;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog;
     }
 }
 

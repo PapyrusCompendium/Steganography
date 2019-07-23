@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,6 +26,26 @@ namespace Steganography
         private void SecretMessageText_TextChanged(object sender, EventArgs e) => secretMessageSize.Text = $"Data Size: {Encoding.UTF8.GetBytes(secretMessageText.Text).Length} bytes";
         private void SteganographyInterface_Shown(object sender, EventArgs e) => secretMessageSize.Text = $"Data Size: {Encoding.UTF8.GetBytes(secretMessageText.Text).Length} bytes";
 
+        private void ConvertImageButton_Click(object sender, EventArgs e)
+        {
+            if (encodeRadio.Checked)
+            {
+                if (SteganographyManager.FitsIntoImage(Encoding.UTF8.GetBytes(secretMessageText.Text), InputImage))
+                {
+                    Task.Run(() =>
+                    {
+                        OutputImage = SteganographyManager.EncodeImage(InputImage, Encoding.UTF8.GetBytes(secretMessageText.Text));
+                        outputImage.Image = OutputImage;
+                        MessageBox.Show("Encoded!");
+                    });
+                }
+            }
+            else if (decodeRadio.Checked)
+            {
+                Task.Run(() => MessageBox.Show(Encoding.UTF8.GetString(SteganographyManager.DecodeImage(OutputImage == null ? InputImage : OutputImage))));
+            }
+        }
+
         private void ImageSelectionLink_Click(object sender, EventArgs e)
         {
             if (openFileDialog.ShowDialog() == DialogResult.OK)
@@ -33,23 +55,11 @@ namespace Steganography
             CalculateImageCapacity();
         }
 
-        private void ConvertImageButton_Click(object sender, EventArgs e)
+        private void SaveImageLink_Click(object sender, EventArgs e)
         {
-            if (encodeRadio.Checked)
+            if(saveFileDialog.ShowDialog() == DialogResult.OK)
             {
-                if (SteganographyManager.FitsIntoImage(Encoding.UTF8.GetBytes(secretMessageText.Text), InputImage))
-                {
-                    outputImage.Invalidate();
-                    Task.Run(() =>
-                    {
-                        OutputImage = SteganographyManager.EncodeImage(InputImage, Encoding.UTF8.GetBytes(secretMessageText.Text));
-                        outputImage.Image = OutputImage;
-                    });
-                }
-            }
-            else if (decodeRadio.Checked)
-            {
-                Task.Run(() => MessageBox.Show(Encoding.UTF8.GetString(SteganographyManager.DecodeImage(OutputImage))));
+                OutputImage.Save(saveFileDialog.FileName, ImageFormat.Png);
             }
         }
     }
