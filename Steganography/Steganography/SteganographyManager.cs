@@ -10,20 +10,17 @@ namespace Steganography
 {
     public static class SteganographyManager
     {
-        // 1 Pixel can store .5 bytes of data
-        // 2 pixels can store 1 byte of data
-        // Length of the data is stored in 8 pixels (4 bytes Int32)
-
-        public static bool FitsIntoImage(byte[] data, Image steganograph)
+        public static bool FitsIntoImage(byte[] data, Bitmap steganograph)
         {
-            return data.Length + 1 < TotalCapacity(steganograph);
+            return data.Length < TotalCapacity(steganograph);
         }
 
-        public static int TotalCapacity(Image steganograph)
+        public static int TotalCapacity(Bitmap steganograph)
         {
-            //Take the aera (Total number of pixels) * by 3 for each byte in a pixel (RGB)
-            //Divide by 8 to get total capacity (1 bit per byte LSB)
-            return ((steganograph.Height * steganograph.Width) * 3) / 8;
+            // 1 Pixel can store .5 bytes of data
+            // 2 pixels can store 1 byte of data
+            // Length of the data is stored in 8 pixels (4 bytes Int32)
+            return ((steganograph.Width * steganograph.Height) - 8) / 2;
         }
 
         public static byte SetLSB(bool bit, byte value)
@@ -35,9 +32,9 @@ namespace Steganography
             return value;
         }
 
-        public static bool GetLSB(byte colour)
+        public static bool GetLSB(byte value)
         {
-            return (colour & 1) != 0;
+            return (value & 1) != 0;
         }
 
         public static byte[] BitArrayToByteArray(BitArray bits)
@@ -63,10 +60,7 @@ namespace Steganography
                     byte[] colourBytes = GetColourBytes(image.GetPixel(x, y));
 
                     for (int i = 0; i < 4; i++)
-                    {
-                        bits[((x + y) * 4) + i] = GetLSB(colourBytes[i]);
-                        Console.WriteLine(colourBytes[i]);
-                    }
+                        bits[(((x * image.Width) + y) * 4) + i] = GetLSB(colourBytes[i]);
                 }
 
             byte[] lengthBytes = BitArrayToByteArray(new BitArray(bits));
@@ -76,22 +70,22 @@ namespace Steganography
 
         private static byte[] DecodeImageLSB(Bitmap image, int length)
         {
-            int totalPixelsEncoded = ((length * 8) / 4);
+            int totalPixelsEncoded = length * 2;
             bool[] bits = new bool[length * 8];
 
             for (int x = 0; x < image.Width; x++)
                 for (int y = 0; y < image.Height; y++)
                 {
-                    if ((x + y) < 8)
+                    if ((x * image.Width) + y < 8)
                         continue;
 
-                    if ((x + y - 8) >= totalPixelsEncoded)
+                    if ((x * image.Width) + y - 8 >= totalPixelsEncoded)
                         return BitArrayToByteArray(new BitArray(bits.ToArray()));
 
                     byte[] colourBytes = GetColourBytes(image.GetPixel(x, y));
 
                     for (int i = 0; i < 4; i++)
-                        bits[((x + y - 8) * 4) + i] = GetLSB(colourBytes[i]);
+                        bits[(((x * image.Width) + y) * 4) + i - 32] = GetLSB(colourBytes[i]);
                 }
 
             return BitArrayToByteArray(new BitArray(bits.ToArray()));
@@ -118,12 +112,12 @@ namespace Steganography
             for (int x = 0; x < image.Width; x++)
                 for (int y = 0; y < image.Height; y++)
                 {
-                    if (((x + y) * 4) >= bits.Length)
+                    if ((((x * image.Width) + y) * 4) >= bits.Length)
                         return bitMap;
 
                     byte[] colourBytes = GetColourBytes(bitMap.GetPixel(x, y));
                     for (int i = 0; i < 4; i++)
-                        colourBytes[i] = SetLSB(bits[((x + y) * 4) + i], colourBytes[i]);
+                        colourBytes[i] = SetLSB(bits[(((x * image.Width) + y) * 4) + i], colourBytes[i]);
 
                     bitMap.SetPixel(x, y, Color.FromArgb(colourBytes[0], colourBytes[1], colourBytes[2], colourBytes[3]));
                 }

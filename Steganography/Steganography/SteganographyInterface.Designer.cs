@@ -82,7 +82,7 @@
             // 
             this.aesCheckBox.AutoSize = true;
             this.aesCheckBox.ForeColor = System.Drawing.Color.White;
-            this.aesCheckBox.Location = new System.Drawing.Point(480, 102);
+            this.aesCheckBox.Location = new System.Drawing.Point(480, 80);
             this.aesCheckBox.Name = "aesCheckBox";
             this.aesCheckBox.Size = new System.Drawing.Size(69, 17);
             this.aesCheckBox.TabIndex = 3;
@@ -119,7 +119,7 @@
             this.aesPassword.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.aesPassword.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.aesPassword.ForeColor = System.Drawing.Color.White;
-            this.aesPassword.Location = new System.Drawing.Point(432, 125);
+            this.aesPassword.Location = new System.Drawing.Point(432, 103);
             this.aesPassword.Name = "aesPassword";
             this.aesPassword.Size = new System.Drawing.Size(162, 22);
             this.aesPassword.TabIndex = 5;
@@ -131,7 +131,7 @@
             this.convertImageButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.convertImageButton.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.convertImageButton.ForeColor = System.Drawing.Color.White;
-            this.convertImageButton.Location = new System.Drawing.Point(457, 260);
+            this.convertImageButton.Location = new System.Drawing.Point(454, 302);
             this.convertImageButton.Name = "convertImageButton";
             this.convertImageButton.Size = new System.Drawing.Size(114, 36);
             this.convertImageButton.TabIndex = 6;
@@ -156,7 +156,7 @@
             this.imageCapacity.AutoSize = true;
             this.imageCapacity.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.imageCapacity.ForeColor = System.Drawing.Color.White;
-            this.imageCapacity.Location = new System.Drawing.Point(451, 9);
+            this.imageCapacity.Location = new System.Drawing.Point(446, 9);
             this.imageCapacity.Name = "imageCapacity";
             this.imageCapacity.Size = new System.Drawing.Size(121, 15);
             this.imageCapacity.TabIndex = 2;
@@ -168,10 +168,10 @@
             this.secretMessageText.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.secretMessageText.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.secretMessageText.ForeColor = System.Drawing.Color.White;
-            this.secretMessageText.Location = new System.Drawing.Point(430, 190);
+            this.secretMessageText.Location = new System.Drawing.Point(333, 153);
             this.secretMessageText.Multiline = true;
             this.secretMessageText.Name = "secretMessageText";
-            this.secretMessageText.Size = new System.Drawing.Size(162, 64);
+            this.secretMessageText.Size = new System.Drawing.Size(367, 143);
             this.secretMessageText.TabIndex = 5;
             this.secretMessageText.Text = "Secret Message";
             this.secretMessageText.TextChanged += new System.EventHandler(this.SecretMessageText_TextChanged);
@@ -181,7 +181,7 @@
             this.secretMessageSize.AutoSize = true;
             this.secretMessageSize.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.secretMessageSize.ForeColor = System.Drawing.Color.White;
-            this.secretMessageSize.Location = new System.Drawing.Point(463, 168);
+            this.secretMessageSize.Location = new System.Drawing.Point(463, 131);
             this.secretMessageSize.Name = "secretMessageSize";
             this.secretMessageSize.Size = new System.Drawing.Size(97, 15);
             this.secretMessageSize.TabIndex = 7;

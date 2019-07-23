@@ -20,7 +20,7 @@ namespace Steganography
             InitializeComponent();
         }
 
-        public void CalculateImageCapacity() => imageCapacity.Text = $"Max Capacity: {SteganographyManager.TotalCapacity(inputImage.Image) - 4} bytes";
+        public void CalculateImageCapacity() => imageCapacity.Text = $"Max Capacity: {SteganographyManager.TotalCapacity(InputImage)} bytes";
         private void SecretMessageText_TextChanged(object sender, EventArgs e) => secretMessageSize.Text = $"Data Size: {Encoding.UTF8.GetBytes(secretMessageText.Text).Length} bytes";
         private void SteganographyInterface_Shown(object sender, EventArgs e) => secretMessageSize.Text = $"Data Size: {Encoding.UTF8.GetBytes(secretMessageText.Text).Length} bytes";
 
@@ -37,14 +37,19 @@ namespace Steganography
         {
             if (encodeRadio.Checked)
             {
-                if (SteganographyManager.FitsIntoImage(Encoding.UTF8.GetBytes(secretMessageText.Text), inputImage.Image))
-                    OutputImage = SteganographyManager.EncodeImage(InputImage, Encoding.UTF8.GetBytes(secretMessageText.Text));
-
-                outputImage.Image = OutputImage;
+                if (SteganographyManager.FitsIntoImage(Encoding.UTF8.GetBytes(secretMessageText.Text), InputImage))
+                {
+                    outputImage.Invalidate();
+                    Task.Run(() =>
+                    {
+                        OutputImage = SteganographyManager.EncodeImage(InputImage, Encoding.UTF8.GetBytes(secretMessageText.Text));
+                        outputImage.Image = OutputImage;
+                    });
+                }
             }
             else if (decodeRadio.Checked)
             {
-                MessageBox.Show(Encoding.UTF8.GetString(SteganographyManager.DecodeImage(OutputImage)));
+                Task.Run(() => MessageBox.Show(Encoding.UTF8.GetString(SteganographyManager.DecodeImage(OutputImage))));
             }
         }
     }
