@@ -10,7 +10,8 @@ and changing the LSB to one bit of the data that you are trying to store. For ex
 one byte of data I would like to store, I could store it in two pixels. I can store 4 bits  
 in one pixel without modifying the image enough that it is visible to the naked eye. In this  
 implementation I am only storing string data, but this can be made to store anything from files  
-to other images completely, like QR codes.
+to other images completely, like QR codes.  
+[![Tool Screenshot](https://github.com/PapyrusCompendium/Steganography/blob/master/ScreenShot.png)]()
 
 # How do I use this?
 This version of my implementation is built for user advantage. I wanted this to be easy to use by  
